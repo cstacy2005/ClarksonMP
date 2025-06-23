@@ -1,0 +1,9 @@
+path: ./data
+train: train/images
+val: validation/images
+test: test/images
+nc: 3
+names:
+- 3MP
+- 4MP
+- 5MP
