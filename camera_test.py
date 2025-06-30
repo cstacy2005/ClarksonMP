@@ -3,17 +3,15 @@
 
  
 import cv2
-import time
+import datetime
 
  
 # Create an object to read 
 # from camera
 video = cv2.VideoCapture(0)
-
-x = time.strftime("%Y_%m_%d_%H%M%S", time.localtime())
-
+x = input("Enter Name: ")
 # We need to check if camera
-# is opened previously or not
+# is opened previously or noty
 if (video.isOpened() == False): 
     print("Error reading video file")
 
@@ -29,26 +27,28 @@ size = (frame_width, frame_height)
 # is stored in 'filename.avi' file.
 
 started = False
-result = cv2.VideoWriter(f"./videos/{x}.mp4", cv2.VideoWriter_fourcc(*'MP4V'), 10, [frame_height,frame_width])
+result = cv2.VideoWriter(f"./videos/StopwatchTest2/{x}.mp4", cv2.VideoWriter_fourcc(*'MP4V'), 10, [frame_height,frame_width])
 
 while(True):
     ret, frame = video.read()
-    
-    for i in range(0, 3):
-        ret, frame = video.read()
 
-    rotatedFrame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE) 
+    rotatedFrame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+    
+    dt = str(datetime.datetime.now())
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    timeFrame = cv2.putText(rotatedFrame, dt, (10, 50), font, 0.3, (0, 0, 128), 1, cv2.LINE_AA)
+
 
     if ret == True: 
 
         # Write the frame into the
         # file 'filename.avi'
         if started:
-            result.write(rotatedFrame)
+            result.write(timeFrame)
 
         # Display the frame
         # saved in the file
-        cv2.imshow('Frame', rotatedFrame)
+        cv2.imshow('Frame', timeFrame)
 
         # Press S on keyboard 
         # to stop the process
