@@ -27,7 +27,7 @@ size = (frame_width, frame_height)
 # is stored in 'filename.avi' file.
 
 started = False
-result = cv2.VideoWriter(f"./videos/StopwatchTest2/{x}.mp4", cv2.VideoWriter_fourcc(*'MP4V'), 10, [frame_height,frame_width])
+result = cv2.VideoWriter(f"./videos/River/{x}.mp4", cv2.VideoWriter_fourcc(*'MP4V'), 10, [frame_height,frame_width])
 
 while(True):
     ret, frame = video.read()

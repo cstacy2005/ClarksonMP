@@ -10,8 +10,8 @@ import csv, time
 import math
 import statistics
 
-video_path = "videos/StopwatchTest2/4mm_tap_1mp_sw6.mp4"
-csv_path = "videos/StopwatchTest2/4mm_tap_1mp_sw6.csv"
+video_path = "videos/Distilled/5mm_distilled_1mp_20.mp4"
+csv_path = "videos/Distilled/5mm_distilled_1mp_20.csv"
 
 # Initialize CSV file
 header = ['frame', 'fps', 'x_center', 'y_center', 'distance_1f', 'velocity_1f', 'MP_count','distance_5f',
@@ -47,7 +47,7 @@ velocity_5f = None
 
 # Conversion factor from pixels to centimeters
 FRAME_CM = 28  
-MANUAL_FPS = 56.601
+MANUAL_FPS = 56.6
 
 while True:
     # Read a frame from the video
@@ -84,6 +84,11 @@ while True:
             # Annotate image with bounding box and label
             annotator.box_label(xyxy, f'{label} {conf:.2f}', color=(255, 0, 0))
             
+            if len(data) > 0:
+                if (frame_count - data[-1][0]) == 0:
+                    continue
+                    
+            
             # Update MP count when new MP crosses the line (for vids with mult. MPs)
             # TODO: Adjust threshold (90) because of increased frames
             """ if prev_frame is None or (frame_count - prev_frame >= 90):
@@ -111,7 +116,10 @@ while True:
             # Calculate distance and velocity for the last frame
             if len(data) > 0 and (frame_count - data[-1][0] <= 10):
                 distance_1f = math.sqrt((center_x - data[-1][2]) ** 2 + (center_y - data[-1][3]) ** 2)
-                velocity_1f = distance_1f * MANUAL_FPS 
+                if frame_count - data[-1][0] == 0:
+                    velocity_1f = distance_1f * MANUAL_FPS
+                else:
+                    velocity_1f = distance_1f * MANUAL_FPS * (1/(frame_count - data[-1][0]))
                 current_data = [frame_count, fps, center_x, center_y, distance_1f, velocity_1f, total_MP, "", "", "", "", size, size_5f]
             
             # Calculate average velocity and distance for the last 5 frames
